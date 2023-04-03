@@ -43,7 +43,8 @@ export class WebhookService {
       };
     }
 
-    return this.callSendAPI(sender_psid, response);
+    const aa = this.callSendAPI(sender_psid, response);
+    console.log('aaa', aa);
   }
 
   callSendAPI(sender_psid: string, response) {
