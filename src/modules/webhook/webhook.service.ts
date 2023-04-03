@@ -15,7 +15,7 @@ export class WebhookService {
     console.dir(body, { depth: null });
 
     if (body.object === 'page') {
-      body.entry.forEach(async function (entry) {
+      body.entry.forEach(async (entry) => {
         const webhook_event = entry.messaging[0];
         console.log(webhook_event);
 
