@@ -51,6 +51,7 @@ export class WebhookService {
       message: result,
     };
 
+    console.log('accesstoken', this.configService.get('PAGE_ACCESS_TOKEN'));
     // Send the HTTP request to the Messenger Platform
     request(
       {
@@ -60,6 +61,7 @@ export class WebhookService {
         json: request_body,
       },
       (err, res, body) => {
+        console.log('body', body);
         if (!err) {
           console.log('message sent!');
         } else {
