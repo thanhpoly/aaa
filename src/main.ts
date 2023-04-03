@@ -18,7 +18,7 @@ async function bootstrap() {
   const appName = configService.getEnv('APP_NAME');
 
   app.use(helmet());
-  app.setGlobalPrefix(`api`);
+  app.setGlobalPrefix('');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
