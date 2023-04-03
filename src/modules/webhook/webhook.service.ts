@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as request from 'request';
+import { ERROR } from 'src/constants/exception.constant';
+import { BaseException } from 'src/shared/filters/exception.filter';
 
-@Injectable()
+@Injectable({})
 export class WebhookService {
   constructor(private configService: ConfigService) {}
-  postWebhook(req, res) {
-    const body = req.body;
-
+  postWebhook(body: { object: string; entry: any[] }) {
     console.log(`\u{1F7EA} Received webhook:`);
     console.dir(body, { depth: null });
+
     if (body.object === 'page') {
       body.entry.forEach(function (entry) {
-        // Get the webhook event. entry.messaging is an array, but
-        // will only ever contain one event, so we get index 0
         const webhook_event = entry.messaging[0];
         console.log(webhook_event);
 
@@ -25,34 +24,31 @@ export class WebhookService {
           this.handleMessage(sender_psid, webhook_event.message);
         }
       });
-      res.status(200).send('EVENT_RECEIVED');
+
+      return 'EVENT_RECEIVED';
     } else {
-      // Return a '404 Not Found' if event is not from a page subscription
-      res.sendStatus(404);
+      throw new BaseException(ERROR.NOT_FOUND);
     }
   }
 
-  handleMessage(sender_psid, received_message) {
-    let response;
+  handleMessage(sender_psid: string, received_message: { text: string }) {
+    let result;
 
-    // Check if the message contains text
     if (received_message.text) {
-      // Create the payload for a basic text message
-      response = {
+      result = {
         text: `You sent the message: "${received_message.text}". Now send me an image!`,
       };
     }
 
-    // Sends the response message
-    this.callSendAPI(sender_psid, response);
+    this.callSendAPI(sender_psid, result);
   }
 
-  callSendAPI(sender_psid, response) {
+  callSendAPI(sender_psid: string, result: string) {
     const request_body = {
       recipient: {
         id: sender_psid,
       },
-      message: response,
+      message: result,
     };
 
     // Send the HTTP request to the Messenger Platform
@@ -87,10 +83,10 @@ export class WebhookService {
       if (mode === 'subscribe' && token === verifyToken) {
         // Respond with the challenge token from the request
         console.log('WEBHOOK_VERIFIED');
-        res.status(200).send(challenge);
+        return res.status(200).send(challenge);
       } else {
         // Respond with '403 Forbidden' if verify tokens do not match
-        res.sendStatus(403);
+        return res.sendStatus(403);
       }
     }
   }

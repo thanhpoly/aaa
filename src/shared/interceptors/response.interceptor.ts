@@ -40,7 +40,7 @@ export class ResponseTransformInterceptor<T>
               RESPONSE_MESSAGE,
               context.getHandler(),
             ) || COMMON_CONSTANT.RESPONSE_SUCCESS.MESSAGE,
-          data: data.data || data,
+          data: data.data! || data,
         };
 
         const logData: LogStructure = {

@@ -27,4 +27,8 @@ export const ERROR = {
     message: 'too many requests',
     code: 6,
   },
+  NOT_FOUND: {
+    message: 'not found',
+    code: 7,
+  },
 };
