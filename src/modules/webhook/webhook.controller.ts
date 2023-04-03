@@ -1,18 +1,8 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Req,
-  Res,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Body } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { WebhookService } from './webhook.service';
 import { Public } from 'src/shared/decorators/auth.decorator';
 import { ConfigService } from '@nestjs/config';
-// import { WebhookDto } from './dto/webhook-request';
 
 @Controller('webhook')
 export class WebhookController {
@@ -23,14 +13,14 @@ export class WebhookController {
 
   @Public()
   @Post()
-  postWebhook(@Body() body: any) {
+  postWebhook(@Body() body: { object: string; entry: any[] }): void {
     return this.webhookService.postWebhook(body);
   }
 
   @Public()
   @Get()
   getWebhook(@Req() req: Request, @Res() res: Response) {
-    const verifyToken = this.configService.get('VERIFY_TOKEN');
+    const verifyToken: string = this.configService.get<string>('VERIFY_TOKEN');
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
