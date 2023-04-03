@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as request from 'request';
+import request from 'request';
 import { ERROR } from 'src/constants/exception.constant';
 import { BaseException } from 'src/shared/filters/exception.filter';
+import { WebhookDto } from './dto/webhook-request';
 
 @Injectable({})
 export class WebhookService {
   constructor(private configService: ConfigService) {}
-  postWebhook(body: { object: string; entry: any[] }) {
+  postWebhook(body: WebhookDto) {
     console.log(`\u{1F7EA} Received webhook:`);
     console.dir(body, { depth: null });
 
@@ -32,23 +33,23 @@ export class WebhookService {
   }
 
   handleMessage(sender_psid: string, received_message: { text: string }) {
-    let result;
+    let response;
 
     if (received_message.text) {
-      result = {
+      response = {
         text: `You sent the message: "${received_message.text}". Now send me an image!`,
       };
     }
 
-    return this.callSendAPI(sender_psid, result);
+    return this.callSendAPI(sender_psid, response);
   }
 
-  callSendAPI(sender_psid: string, result: string) {
+  callSendAPI(sender_psid: string, response) {
     const request_body = {
       recipient: {
         id: sender_psid,
       },
-      message: result,
+      message: response,
     };
 
     console.log('accesstoken', this.configService.get('PAGE_ACCESS_TOKEN'));

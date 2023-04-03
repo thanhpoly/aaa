@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { WebhookService } from './webhook.service';
 import { Public } from 'src/shared/decorators/auth.decorator';
 import { ConfigService } from '@nestjs/config';
+import { WebhookDto } from './dto/webhook-request';
 
 @Controller('webhook')
 export class WebhookController {
@@ -22,7 +23,7 @@ export class WebhookController {
 
   @Public()
   @Post()
-  postWebhook(@Body() body: { object: string; entry: any[] }) {
+  postWebhook(@Body() body: WebhookDto) {
     return this.webhookService.postWebhook(body);
   }
 
