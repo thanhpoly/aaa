@@ -66,10 +66,10 @@ import { WebhookModule } from './modules/webhook/webhook.module';
       provide: APP_GUARD,
       useClass: RoleGuard,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ResponseTransformInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: ResponseTransformInterceptor,
+    // },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

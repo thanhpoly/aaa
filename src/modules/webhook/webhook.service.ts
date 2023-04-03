@@ -45,6 +45,7 @@ export class WebhookService {
 
     const aa = this.callSendAPI(sender_psid, response);
     console.log('aaa', aa);
+    return aa;
   }
 
   callSendAPI(sender_psid: string, response) {
