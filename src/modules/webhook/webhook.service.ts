@@ -21,7 +21,7 @@ export class WebhookService {
         console.log('Sender PSID: ' + sender_psid);
 
         if (webhook_event.message) {
-          this.handleMessage(sender_psid, webhook_event.message);
+          return this.handleMessage(sender_psid, webhook_event.message);
         }
       });
 
@@ -40,7 +40,7 @@ export class WebhookService {
       };
     }
 
-    this.callSendAPI(sender_psid, result);
+    return this.callSendAPI(sender_psid, result);
   }
 
   callSendAPI(sender_psid: string, result: string) {
