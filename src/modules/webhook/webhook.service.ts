@@ -8,7 +8,7 @@ import { WebhookDto } from './dto/webhook-request';
 @Injectable({})
 export class WebhookService {
   constructor(private configService: ConfigService) {}
-  async postWebhook(body: any) {
+  postWebhook(body: any) {
     console.log(`\u{1F7EA} Received webhook:`);
     console.dir(body, { depth: null });
 
@@ -24,10 +24,7 @@ export class WebhookService {
         console.log('b', webhook_event.message);
 
         if (webhook_event.message) {
-          const a = await this?.handleMessage(
-            sender_psid,
-            webhook_event.message,
-          );
+          const a = this.handleMessage(sender_psid, webhook_event.message);
           console.log('a', a);
           return a;
         }
@@ -37,7 +34,7 @@ export class WebhookService {
     }
   }
 
-  async handleMessage(sender_psid: string, received_message: { text: string }) {
+  handleMessage(sender_psid: string, received_message: { text: string }) {
     console.log('sender_psid', sender_psid);
     console.log('received_message', received_message);
     let response;
@@ -48,13 +45,15 @@ export class WebhookService {
       };
     }
 
-    const aa = await this.callSendAPI(sender_psid, response);
-    console.log('aaa', aa);
-    return aa;
+    // Sends the response message
+    const a = this.callSendAPI(sender_psid, response);
+    console.log('a', a);
+    return a;
   }
 
-  callSendAPI(sender_psid: string, response) {
-    console.log('accesstoken', this.configService.get('PAGE_ACCESS_TOKEN'));
+  callSendAPI(sender_psid: string, response: { text: string }) {
+    console.log('sender_psid', sender_psid);
+    console.log('response', response);
     const request_body = {
       recipient: {
         id: sender_psid,
@@ -62,8 +61,7 @@ export class WebhookService {
       message: response,
     };
 
-    // Send the HTTP request to the Messenger Platform
-    request(
+    const aa = request(
       {
         uri: 'https://graph.facebook.com/v2.6/me/messages',
         qs: { access_token: this.configService.get('PAGE_ACCESS_TOKEN') },
@@ -78,27 +76,7 @@ export class WebhookService {
         }
       },
     );
-  }
-
-  getWebhook(req, res) {
-    const verifyToken = this.configService.get('VERIFY_TOKEN');
-    console.log('verifyToken', verifyToken);
-    // Parse the query params
-    const mode = req.query['hub.mode'];
-    const token = req.query['hub.verify_token'];
-    const challenge = req.query['hub.challenge'];
-
-    // Check if a token and mode is in the query string of the request
-    if (mode && token) {
-      // Check the mode and token sent is correct
-      if (mode === 'subscribe' && token === verifyToken) {
-        // Respond with the challenge token from the request
-        console.log('WEBHOOK_VERIFIED');
-        return res.status(200).send(challenge);
-      } else {
-        // Respond with '403 Forbidden' if verify tokens do not match
-        return res.sendStatus(403);
-      }
-    }
+    console.log('aa', aa);
+    return aa;
   }
 }
