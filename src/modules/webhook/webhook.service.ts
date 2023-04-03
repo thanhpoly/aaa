@@ -8,12 +8,12 @@ import { WebhookDto } from './dto/webhook-request';
 @Injectable({})
 export class WebhookService {
   constructor(private configService: ConfigService) {}
-  postWebhook(body: any) {
+  async postWebhook(body: any) {
     console.log(`\u{1F7EA} Received webhook:`);
     console.dir(body, { depth: null });
 
     if (body.object === 'page') {
-      body.entry.forEach(function (entry) {
+      body.entry.forEach(async function (entry) {
         const webhook_event = entry.messaging[0];
         console.log(webhook_event);
 
@@ -24,7 +24,10 @@ export class WebhookService {
         console.log('b', webhook_event.message);
 
         if (webhook_event.message) {
-          const a = this?.handleMessage(sender_psid, webhook_event.message);
+          const a = await this?.handleMessage(
+            sender_psid,
+            webhook_event.message,
+          );
           console.log('a', a);
           return a;
         }
@@ -34,7 +37,7 @@ export class WebhookService {
     }
   }
 
-  handleMessage(sender_psid: string, received_message: { text: string }) {
+  async handleMessage(sender_psid: string, received_message: { text: string }) {
     console.log('sender_psid', sender_psid);
     console.log('received_message', received_message);
     let response;
@@ -45,7 +48,7 @@ export class WebhookService {
       };
     }
 
-    const aa = this.callSendAPI(sender_psid, response);
+    const aa = await this.callSendAPI(sender_psid, response);
     console.log('aaa', aa);
     return aa;
   }
