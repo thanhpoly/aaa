@@ -21,10 +21,10 @@ export class WebhookService {
         const sender_psid = webhook_event.sender.id;
         console.log('Sender PSID: ' + sender_psid);
 
-        console.log('b');
+        console.log('b', webhook_event.message);
 
         if (webhook_event.message) {
-          const a = this.handleMessage(sender_psid, webhook_event.message);
+          const a = this?.handleMessage(sender_psid, webhook_event.message);
           console.log('a', a);
           return a;
         }
