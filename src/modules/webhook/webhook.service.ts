@@ -8,7 +8,7 @@ import { WebhookDto } from './dto/webhook-request';
 @Injectable({})
 export class WebhookService {
   constructor(private configService: ConfigService) {}
-  postWebhook(body: WebhookDto) {
+  postWebhook(body: any) {
     console.log(`\u{1F7EA} Received webhook:`);
     console.dir(body, { depth: null });
 
@@ -25,8 +25,6 @@ export class WebhookService {
           return this.handleMessage(sender_psid, webhook_event.message);
         }
       });
-
-      return 'EVENT_RECEIVED';
     } else {
       throw new BaseException(ERROR.NOT_FOUND);
     }

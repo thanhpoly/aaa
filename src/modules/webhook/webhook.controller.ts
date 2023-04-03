@@ -23,7 +23,7 @@ export class WebhookController {
 
   @Public()
   @Post()
-  postWebhook(@Body() body: WebhookDto) {
+  postWebhook(@Body() body: any) {
     return this.webhookService.postWebhook(body);
   }
 
