@@ -35,6 +35,8 @@ export class WebhookService {
   }
 
   handleMessage(sender_psid: string, received_message: { text: string }) {
+    console.log('sender_psid', sender_psid);
+    console.log('received_message', received_message);
     let response;
 
     if (received_message.text) {
