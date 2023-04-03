@@ -12,7 +12,7 @@ import { Request, Response } from 'express';
 import { WebhookService } from './webhook.service';
 import { Public } from 'src/shared/decorators/auth.decorator';
 import { ConfigService } from '@nestjs/config';
-import { WebhookDto } from './dto/webhook-request';
+// import { WebhookDto } from './dto/webhook-request';
 
 @Controller('webhook')
 export class WebhookController {
