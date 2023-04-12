@@ -1,25 +1,25 @@
-import { Controller, Get, Post, Req, Res, Body } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { WebhookService } from './webhook.service';
-import { Public } from 'src/shared/decorators/auth.decorator';
 import { ConfigService } from '@nestjs/config';
+import { Public } from '../../shared/decorators/auth.decorator';
+import { FacebookService } from './facebook.service';
 
 @Controller('webhook')
-export class WebhookController {
+export class FacebookController {
   constructor(
-    private readonly webhookService: WebhookService,
-    private configService: ConfigService,
+    private readonly facebookService: FacebookService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Public()
   @Post()
   postWebhook(@Body() body: { object: string; entry: any[] }): void {
-    return this.webhookService.postWebhook(body);
+    return this.facebookService.postWebhook(body);
   }
 
   @Public()
   @Get()
-  getWebhook(@Req() req: Request, @Res() res: Response) {
+  getFacebookWebhook(@Req() req: Request, @Res() res: Response) {
     const verifyToken: string = this.configService.get<string>('VERIFY_TOKEN');
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];

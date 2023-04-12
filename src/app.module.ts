@@ -8,7 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './shared/guards/auth.guard';
 import { RoleGuard } from './shared/guards/role.guard';
-import { RedisModule, RedisManager } from '@liaoliaots/nestjs-redis';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ResponseTransformInterceptor } from './shared/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './shared/filters/exception.filter';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -16,7 +16,7 @@ import { ThrottlerBehindProxyGuard } from './shared/guards/throttler.guard';
 import { COMMON_CONSTANT } from './constants/common.constant';
 import { CronModule } from './modules/cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { WebhookModule } from './modules/webhook/webhook.module';
+import { FacebookModule } from './modules/facebook/facebook.module';
 
 @Module({
   imports: [
@@ -29,29 +29,27 @@ import { WebhookModule } from './modules/webhook/webhook.module';
       limit: COMMON_CONSTANT.THROTTLER.LIMIT,
     }),
     ScheduleModule.forRoot(),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [SharedModule],
-    //   inject: [ApiConfigService],
-    //   useFactory: (configService: ApiConfigService) => {
-    //     return configService.getMysqlConfig();
-    //   },
-    // }),
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      inject: [ApiConfigService],
+      useFactory: (configService: ApiConfigService) => {
+        return configService.getMysqlConfig();
+      },
+    }),
     RedisModule.forRootAsync({
       imports: [SharedModule],
       inject: [ApiConfigService],
       useFactory: (configService: ApiConfigService) => {
         return {
           config: configService.getRedisConfig(),
-          global: false,
         };
       },
     }),
     SharedModule,
     HealthCheckModule,
-    // AuthModule,
-
+    AuthModule,
     CronModule,
-    WebhookModule,
+    FacebookModule,
   ],
   providers: [
     {
@@ -66,10 +64,10 @@ import { WebhookModule } from './modules/webhook/webhook.module';
       provide: APP_GUARD,
       useClass: RoleGuard,
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: ResponseTransformInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTransformInterceptor,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

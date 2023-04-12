@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -9,7 +13,6 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
   const configService: ApiConfigService = app
     .select(SharedModule)
     .get(ApiConfigService);
@@ -18,7 +21,7 @@ async function bootstrap() {
   const appName = configService.getEnv('APP_NAME');
 
   app.use(helmet());
-  app.setGlobalPrefix('');
+  app.setGlobalPrefix(``);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -36,4 +39,5 @@ async function bootstrap() {
     console.info(`🚀 server start at ${port}!`);
   });
 }
+
 bootstrap();

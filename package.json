@@ -1,5 +1,5 @@
 {
-  "name": "nest-boilerplate",
+  "name": "chatbot",
   "version": "0.0.1",
   "engines": {
     "node": ">=16.0.0",
@@ -15,6 +15,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "clean": "rm -rf node_modules dist logs yarn-error.log",
     "typeorm:migrate": "typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts",
     "typeorm:revert": "typeorm-ts-node-commonjs migration:revert -d ./src/data-source.ts",
     "typeorm:create": "typeorm-ts-node-commonjs migration:create",
@@ -35,7 +36,6 @@
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/throttler": "^4.0.0",
     "@nestjs/typeorm": "^9.0.1",
-    "@types/request": "^2.48.8",
     "axios": "^1.3.4",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^5.2.0",
@@ -69,6 +69,7 @@
     "@types/node": "18.11.18",
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.35",
+    "@types/request": "^2.48.8",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",

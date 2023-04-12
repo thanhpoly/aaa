@@ -11,23 +11,23 @@ services:
       MYSQL_PASSWORD: 1
       LANG: C.UTF-8
     ports:
-      - 3316:3306
+      - 13316:3306
 
   redis:
     image: 'redis:6-alpine'
     platform: linux/x86_64
     ports:
-      - 6389:6379
+      - 16389:6379
 
   app:
     build: .
     ports:
-      - 3000:3000
+      - 4301:3000
     environment:
       # app
       - NODE_ENV=development
-      - APP_NAME=nest-boilerplate
-      - PORT=3000
+      - APP_NAME=chatbot
+      - PORT=4301
       # database
       - DATABASE_TYPE=mysql
       - DATABASE_HOST=db

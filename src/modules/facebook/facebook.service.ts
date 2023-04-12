@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import request from 'request';
-import { ERROR } from 'src/constants/exception.constant';
-import { BaseException } from 'src/shared/filters/exception.filter';
+import { BaseException } from '../../shared/filters/exception.filter';
+import { ERROR } from '../../constants/exception.constant';
 
-@Injectable({})
-export class WebhookService {
+@Injectable()
+export class FacebookService {
   constructor(private configService: ConfigService) {}
 
   postWebhook(body: { object: string; entry: any[] }): void {
