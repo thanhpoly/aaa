@@ -29,19 +29,20 @@ import { FacebookModule } from './modules/facebook/facebook.module';
       limit: COMMON_CONSTANT.THROTTLER.LIMIT,
     }),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [SharedModule],
-      inject: [ApiConfigService],
-      useFactory: (configService: ApiConfigService) => {
-        return configService.getMysqlConfig();
-      },
-    }),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   inject: [ApiConfigService],
+    //   useFactory: (configService: ApiConfigService) => {
+    //     return configService.getMysqlConfig();
+    //   },
+    // }),
     RedisModule.forRootAsync({
       imports: [SharedModule],
       inject: [ApiConfigService],
       useFactory: (configService: ApiConfigService) => {
         return {
           config: configService.getRedisConfig(),
+          global: true,
         };
       },
     }),
