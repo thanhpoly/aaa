@@ -14,7 +14,6 @@ export class WebhookService {
         const webhook_event = entry.messaging[0];
 
         const sender_psid = webhook_event.sender.id;
-        console.log('Sender PSID: ' + sender_psid)
 
         if (webhook_event.message) {
           return await this.handleMessage(sender_psid, webhook_event.message);
