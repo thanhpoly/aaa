@@ -12,8 +12,10 @@ export class FacebookService {
     if (body.object === 'page') {
       body.entry.forEach(async (entry) => {
         const webhook_event = entry.messaging[0];
+        console.log('webhook_event', webhook_event)
 
         const sender_psid = webhook_event.sender.id;
+        console.log('Sender PSID: ' + sender_psid);
 
         if (webhook_event.message) {
           return await this.handleMessage(sender_psid, webhook_event.message);
